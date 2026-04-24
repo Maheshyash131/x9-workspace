@@ -22,6 +22,9 @@
       },
       "package": "com.anonymous.x9workspace"
     },
+     "extra": {
+      "clerkPublishableKey": "pk_test_YWxlcnQtc2hhcmstODguY2xlcmsuYWNjb3VudHMuZGV2JA"
+    },
     "web": {
       "favicon": "./assets/icon-v1.png"
     },

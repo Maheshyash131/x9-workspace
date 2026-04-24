@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Background */
+    --background: 222 47% 11%;
+    --foreground: 0 0% 100%;
+
+    /* Card / Input */
+    --card: 226 39% 18%;
+    --card-foreground: 0 0% 100%;
+
+    /* Primary (orange button) */
+    --primary: 28 90% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary text */
+    --secondary: 220 15% 20%;
+    --secondary-foreground: 220 10% 70%;
+
+    /* Muted */
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 10% 55%;
+
+    /* Accent (glow / highlight) */
+    --accent: 28 90% 65%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Border */
+    --border: 220 20% 25%;
+
+    /* Optional radius (if using components) */
+    --radius: 0.75rem;
+  }
+
+  /* Apply base styles */
+  body {
+    @apply bg-background text-foreground;
+  }
+}
