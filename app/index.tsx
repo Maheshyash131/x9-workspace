@@ -53,7 +53,7 @@ export default function RoleSelection() {
   className="w-full bg-[#1a1f2e] border border-gray-700 rounded-2xl py-4 mb-4 flex-row items-center justify-center"
   onPress={() =>
     router.push({
-      pathname: "/(auth)/role-login",
+      pathname: "/(auth)/agent-login",
       params: { role: "agent" },
     })
   }

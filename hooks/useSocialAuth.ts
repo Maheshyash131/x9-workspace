@@ -1,12 +1,14 @@
 import { useSSO } from "@clerk/expo";
+import { useAuth, useClerk } from "@clerk/expo";
 import { useState } from "react";
-import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const useSocialAuth = () => {
   const [loadingStrategy, setLoadingStrategy] = useState<string | null>(null);
   const { startSSOFlow } = useSSO();
+  const { isSignedIn } = useAuth();
+  const { signOut } = useClerk();
   const router = useRouter();
 
   const handleSocialAuth = async (
@@ -14,6 +16,12 @@ const useSocialAuth = () => {
     role: "agent" | "architect"
   ) => {
     if (loadingStrategy) return;
+
+    // If session exists, sign out first so Google account chooser opens again.
+    if (isSignedIn) {
+      await signOut();
+    }
+
     setLoadingStrategy(strategy);
 
     try {
@@ -30,16 +38,13 @@ const useSocialAuth = () => {
 
         // ✅ Role-based navigation
         if (role === "agent") {
-          router.replace("/(agent)/home");
+          router.replace("/(agent)/(tabs)/home");
         } else {
           router.replace("/(architect)/home");
         }
-      } else {
-        Alert.alert("Authentication failed", "Try again later.");
       }
     } catch (error) {
       console.log("Error during social authentication:", error);
-      Alert.alert("Authentication failed", "Try again later.");
     } finally {
       setLoadingStrategy(null);
     }
