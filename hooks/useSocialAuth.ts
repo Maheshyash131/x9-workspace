@@ -13,7 +13,7 @@ const useSocialAuth = () => {
 
   const handleSocialAuth = async (
     strategy: "oauth_google",
-    role: "agent" | "architect"
+    role: "agent" | "architect" | "client"
   ) => {
     if (loadingStrategy) return;
 

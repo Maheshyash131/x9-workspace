@@ -4,29 +4,24 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { useState } from "react";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useRouter } from "expo-router";
 import useSocialAuth from "../../hooks/useSocialAuth";
 import "../../global.css";
 
-type UserRole = "agent" | "architect" | "client";
-
-export default function RoleLogin() {
+export default function ClientLogin() {
   const router = useRouter();
-  const { role } = useLocalSearchParams<{
-    role?: UserRole;
-  }>();
 
-  const selectedRole = role ?? "agent";
+  const { handleSocialAuth, loadingStrategy } =
+    useSocialAuth();
 
-  const { handleSocialAuth, loadingStrategy } = useSocialAuth();
-
-  const [identifier, setIdentifier] = useState(""); // email or businessId
-  const [password, setPassword] = useState("");
-
-  const isArchitect = role === "architect";
+  const [email, setEmail] = useState("");
+  const [password, setPassword] =
+    useState("");
 
   return (
     <View className="flex-1 bg-[#050816] px-6 justify-center items-center relative overflow-hidden">
@@ -43,11 +38,14 @@ export default function RoleLogin() {
       <View className="absolute top-[-80px] right-[-80px] w-72 h-72 bg-white opacity-10 rounded-full" />
 
       {/* 🔥 Bottom Glow */}
-     <View className="absolute bottom-[-100px] left-[-60px] w-[260px] h-[260px] bg-orange-500 opacity-40 rounded-full" />
+      <View className="absolute bottom-[-100px] left-[-60px] w-[260px] h-[260px] bg-orange-500 opacity-40 rounded-full" />
 
       {/* ✨ Dots */}
       <View className="absolute top-32 left-10 w-1 h-1 bg-white rounded-full opacity-60" />
       <View className="absolute top-52 right-16 w-1 h-1 bg-white rounded-full opacity-40" />
+      <View className="absolute bottom-40 right-10 w-1 h-1 bg-white rounded-full opacity-60" />
+      <View className="absolute bottom-30 left-20 w-1 h-1 bg-white rounded-full opacity-60" />
+      <View className="absolute bottom-20 left-20 w-1 h-1 bg-white rounded-full opacity-60" />
 
       {/* 📦 Content */}
       <View className="items-center w-full z-10">
@@ -68,16 +66,16 @@ export default function RoleLogin() {
         </Text>
 
         <Text className="text-gray-400 mt-3 mb-6 text-center">
-          Continue as {role}
+          Continue as Client
         </Text>
 
-        {/* ================= IDENTIFIER ================= */}
+        {/* ================= EMAIL ================= */}
         <View className="w-full bg-[#1a1f2e] border border-gray-700 rounded-2xl px-4 py-3 mb-4">
           <TextInput
-            placeholder={isArchitect ? "Business ID" : "Email"}
+            placeholder="Email"
             placeholderTextColor="#888"
-            value={identifier}
-            onChangeText={setIdentifier}
+            value={email}
+            onChangeText={setEmail}
             className="text-white"
           />
         </View>
@@ -111,17 +109,7 @@ export default function RoleLogin() {
         {/* ================= GOOGLE ================= */}
         <TouchableOpacity
           className="w-full bg-[#1a1f2e] border border-gray-700 rounded-2xl py-4 flex-row items-center justify-center mb-4"
-          onPress={() => {
-            if (!selectedRole) {
-              Alert.alert(
-                "Role Missing",
-                "Unable to determine your selected role."
-              );
-              return;
-            }
-
-            handleSocialAuth("oauth_google", selectedRole);
-          }}
+          onPress={() => handleSocialAuth("oauth_google", "client")}
         >
           <Image
             source={require("../../assets/google.png")}
@@ -140,11 +128,11 @@ export default function RoleLogin() {
           onPress={() =>
             router.push({
               pathname: "/(auth)/phone-login",
-              params: { role },
+              params: { role: "client" },
             })
           }
         >
-         <Image
+          <Image
             source={require("../../assets/phone.png")}
             className="w-5 h-5 mr-3"
           />
